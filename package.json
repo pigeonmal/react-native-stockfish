@@ -1,7 +1,7 @@
 {
   "name": "@pigeonmal/react-native-stockfish",
-  "version": "0.1.1",
-  "description": "A fast, mobile-optimized Stockfish 18 Nitro Module for React Native.",
+  "version": "0.2.0",
+  "description": "A fast, small-NNUE Stockfish 18 Nitro Module for React Native.",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "types": "lib/typescript/index.d.ts",
@@ -20,7 +20,6 @@
     "cpp",
     "third-party/stockfish",
     "third-party/stockfish/src/nn-37f18f62d772.nnue",
-    "third-party/stockfish/src/nn-c288c895ea92.nnue",
     "ios/**/*.h",
     "ios/**/*.m",
     "ios/**/*.mm",

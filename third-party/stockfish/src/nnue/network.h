@@ -121,19 +121,15 @@ using SmallFeatureTransformer = FeatureTransformer<TransformedFeatureDimensionsS
 using SmallNetworkArchitecture =
   NetworkArchitecture<TransformedFeatureDimensionsSmall, L2Small, L3Small>;
 
-using BigFeatureTransformer  = FeatureTransformer<TransformedFeatureDimensionsBig>;
-using BigNetworkArchitecture = NetworkArchitecture<TransformedFeatureDimensionsBig, L2Big, L3Big>;
-
-using NetworkBig   = Network<BigNetworkArchitecture, BigFeatureTransformer>;
 using NetworkSmall = Network<SmallNetworkArchitecture, SmallFeatureTransformer>;
 
 
 struct Networks {
-    Networks(EvalFile bigFile, EvalFile smallFile) :
-        big(bigFile, EmbeddedNNUEType::BIG),
+    // Keep the two-file constructor for Stockfish's UCI/engine plumbing, but
+    // use only the compact network in the mobile build.
+    Networks(EvalFile /*bigFile*/, EvalFile smallFile) :
         small(smallFile, EmbeddedNNUEType::SMALL) {}
 
-    NetworkBig   big;
     NetworkSmall small;
 };
 
@@ -152,7 +148,6 @@ template<>
 struct std::hash<Stockfish::Eval::NNUE::Networks> {
     std::size_t operator()(const Stockfish::Eval::NNUE::Networks& networks) const noexcept {
         std::size_t h = 0;
-        Stockfish::hash_combine(h, networks.big);
         Stockfish::hash_combine(h, networks.small);
         return h;
     }

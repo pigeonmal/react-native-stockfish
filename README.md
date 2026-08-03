@@ -4,7 +4,7 @@ Source repository: https://github.com/pigeonmal/react-native-stockfish
 
 Mobile-first Stockfish 18 for React Native, exposed through Nitro Modules and built with React Native Builder Bob.
 
-The package embeds the official Stockfish NNUE networks and keeps search on native worker threads. It defaults to one thread, a 16 MiB hash, and a 250 ms move time so a game UI stays responsive and battery use is predictable.
+The package embeds Stockfish 18's compact NNUE network only, keeping the download and native memory footprint small for mobile. This Stockfish Lite profile trades some playing strength for a much smaller package and keeps search on native worker threads. It defaults to one thread, a 16 MiB hash, and a 250 ms move time so a game UI stays responsive and battery use is predictable.
 
 ## Install
 
@@ -57,7 +57,7 @@ bun run build
 bun run pack:check
 ```
 
-The C++ implementation is linked against the official Stockfish 18 source under `third-party/stockfish`. Stockfish is GPLv3-licensed; see [`third-party/stockfish/Copying.txt`](third-party/stockfish/Copying.txt) and [`third-party/stockfish/AUTHORS`](third-party/stockfish/AUTHORS).
+The C++ implementation is linked against the official Stockfish 18 source under `third-party/stockfish`, with the evaluator configured to use its compact network only. Stockfish is GPLv3-licensed; see [`third-party/stockfish/Copying.txt`](third-party/stockfish/Copying.txt) and [`third-party/stockfish/AUTHORS`](third-party/stockfish/AUTHORS).
 
 ## Publishing
 

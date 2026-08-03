@@ -44,12 +44,8 @@
 //     const unsigned int         gEmbeddedNNUESize;    // the size of the embedded file
 // Note that this does not work in Microsoft Visual Studio.
 #if !defined(_MSC_VER) && !defined(NNUE_EMBEDDING_OFF)
-INCBIN(EmbeddedNNUEBig, EvalFileDefaultNameBig);
 INCBIN(EmbeddedNNUESmall, EvalFileDefaultNameSmall);
 #else
-const unsigned char        gEmbeddedNNUEBigData[1]   = {0x0};
-const unsigned char* const gEmbeddedNNUEBigEnd       = &gEmbeddedNNUEBigData[1];
-const unsigned int         gEmbeddedNNUEBigSize      = 1;
 const unsigned char        gEmbeddedNNUESmallData[1] = {0x0};
 const unsigned char* const gEmbeddedNNUESmallEnd     = &gEmbeddedNNUESmallData[1];
 const unsigned int         gEmbeddedNNUESmallSize    = 1;
@@ -72,10 +68,10 @@ struct EmbeddedNNUE {
 using namespace Stockfish::Eval::NNUE;
 
 EmbeddedNNUE get_embedded(EmbeddedNNUEType type) {
-    if (type == EmbeddedNNUEType::BIG)
-        return EmbeddedNNUE(gEmbeddedNNUEBigData, gEmbeddedNNUEBigEnd, gEmbeddedNNUEBigSize);
-    else
-        return EmbeddedNNUE(gEmbeddedNNUESmallData, gEmbeddedNNUESmallEnd, gEmbeddedNNUESmallSize);
+    // Stockfish Lite embeds one compact NNUE network. The type is retained in
+    // the upstream API so UCI/network loading remains source-compatible.
+    (void) type;
+    return EmbeddedNNUE(gEmbeddedNNUESmallData, gEmbeddedNNUESmallEnd, gEmbeddedNNUESmallSize);
 }
 
 }
@@ -406,9 +402,6 @@ bool Network<Arch, Transformer>::write_parameters(std::ostream&      stream,
 }
 
 // Explicit template instantiations
-
-template class Network<NetworkArchitecture<TransformedFeatureDimensionsBig, L2Big, L3Big>,
-                       FeatureTransformer<TransformedFeatureDimensionsBig>>;
 
 template class Network<NetworkArchitecture<TransformedFeatureDimensionsSmall, L2Small, L3Small>,
                        FeatureTransformer<TransformedFeatureDimensionsSmall>>;
