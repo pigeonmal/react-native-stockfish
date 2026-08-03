@@ -37,7 +37,7 @@
     "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions --max-warnings 0",
     "typescript": "tsc",
     "specs": "tsc --noEmit false && nitrogen --logLevel=\"debug\"",
-    "build": "rm -rf lib && bob build",
+    "build": "rm -rf lib .cache/tsconfig.build.tsbuildinfo && bob build",
     "pack:check": "npm pack --dry-run"
   },
   "keywords": [
