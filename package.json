@@ -1,0 +1,133 @@
+{
+  "name": "@pigeonmal/react-native-stockfish",
+  "version": "0.1.1",
+  "description": "A fast, mobile-optimized Stockfish 18 Nitro Module for React Native.",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "react-native.config.js",
+    "lib",
+    "nitrogen",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/fix-prefab.gradle",
+    "android/CMakeLists.txt",
+    "android/src",
+    "cpp",
+    "third-party/stockfish",
+    "third-party/stockfish/src/nn-37f18f62d772.nnue",
+    "third-party/stockfish/src/nn-c288c895ea92.nnue",
+    "ios/**/*.h",
+    "ios/**/*.m",
+    "ios/**/*.mm",
+    "ios/**/*.cpp",
+    "ios/**/*.swift",
+    "nitro.json",
+    "*.podspec",
+    "README.md"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf android/build node_modules/**/android/build lib",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions --max-warnings 0",
+    "typescript": "tsc",
+    "specs": "tsc --noEmit false && nitrogen --logLevel=\"debug\"",
+    "build": "rm -rf lib && bob build",
+    "pack:check": "npm pack --dry-run"
+  },
+  "keywords": [
+    "react-native",
+    "nitro",
+    "react-native-nitro-modules",
+    "stockfish",
+    "chess",
+    "chess-engine",
+    "uci"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pigeonmal/react-native-stockfish.git"
+  },
+  "author": "Pigeonmal",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/pigeonmal/react-native-stockfish/issues"
+  },
+  "homepage": "https://github.com/pigeonmal/react-native-stockfish#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "devDependencies": {
+    "@react-native/eslint-config": "0.85.3",
+    "@types/react": "^19.2.15",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "nitrogen": "0.36.5",
+    "prettier": "^3.8.3",
+    "react": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-builder-bob": "0.43.0",
+    "react-native-nitro-modules": "0.36.5",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-nitro-modules": "*"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@react-native",
+      "prettier"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "warn",
+        {
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "tabWidth": 2,
+          "trailingComma": "es5",
+          "useTabs": false
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false,
+    "semi": false
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json",
+          "tsc": "./node_modules/typescript/bin/tsc"
+        }
+      ]
+    ]
+  }
+}
