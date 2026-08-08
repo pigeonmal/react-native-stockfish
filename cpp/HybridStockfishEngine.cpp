@@ -52,6 +52,10 @@ std::unique_ptr<Stockfish::Engine> createStockfishEngine() {
   return std::make_unique<Stockfish::Engine>();
 }
 
+std::runtime_error namedStockfishError(const char* operation, const std::exception& error) {
+  return std::runtime_error(std::string("Stockfish ") + operation + " failed: " + error.what());
+}
+
 BestMoveResult resultFromInfo(const AnalysisInfo& info, std::string_view bestMove,
                               std::string_view ponderMove) {
   std::optional<std::string> ponder;
@@ -157,10 +161,14 @@ std::shared_ptr<Promise<void>> HybridStockfishEngine::setPosition(
       std::lock_guard lock(self->stateMutex_);
       self->latestInfo_.reset();
       self->operationInProgress_ = false;
+    } catch (const std::exception& error) {
+      std::lock_guard lock(self->stateMutex_);
+      self->operationInProgress_ = false;
+      throw namedStockfishError("position setup", error);
     } catch (...) {
       std::lock_guard lock(self->stateMutex_);
       self->operationInProgress_ = false;
-      throw;
+      throw std::runtime_error("Stockfish position setup failed with an unknown exception.");
     }
   });
 }
@@ -172,8 +180,11 @@ std::shared_ptr<Promise<BestMoveResult>> HybridStockfishEngine::startSearch(
   Promise<void>::async([self, options, promise]() {
     try {
       self->beginSearch(options, promise);
+    } catch (const std::exception& error) {
+      promise->reject(std::make_exception_ptr(namedStockfishError("search", error)));
     } catch (...) {
-      promise->reject(std::current_exception());
+      promise->reject(std::make_exception_ptr(
+          std::runtime_error("Stockfish search failed with an unknown exception.")));
     }
   });
   return promise;
