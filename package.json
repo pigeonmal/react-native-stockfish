@@ -1,6 +1,6 @@
 {
   "name": "@pigeonmal/react-native-stockfish",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A fast, small-NNUE Stockfish 18 Nitro Module for React Native.",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",

@@ -1,10 +1,12 @@
 #include "HybridStockfishEngine.hpp"
 
 #include "StockfishConversions.hpp"
+#include "../third-party/stockfish/src/bitboard.h"
 
 #include <cmath>
 #include <exception>
 #include <limits>
+#include <mutex>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -35,6 +37,19 @@ int checkedIntegerOption(const char* name, double value, int minimum, int maximu
 void setUciOption(Stockfish::Engine& engine, const std::string& name, const std::string& value) {
   std::istringstream stream("name " + name + " value " + value);
   engine.get_options().setoption(stream);
+}
+
+std::unique_ptr<Stockfish::Engine> createStockfishEngine() {
+  static std::once_flag initializationFlag;
+  std::call_once(initializationFlag, [] {
+    // Stockfish's executable initializes these tables from main(). Nitro
+    // embeds Engine directly, so the library must perform the same startup
+    // sequence before Position::set() computes its state.
+    Stockfish::Bitboards::init();
+    Stockfish::Position::init();
+  });
+
+  return std::make_unique<Stockfish::Engine>();
 }
 
 BestMoveResult resultFromInfo(const AnalysisInfo& info, std::string_view bestMove,
@@ -69,7 +84,7 @@ AnalysisInfo defaultInfo() {
 
 HybridStockfishEngine::HybridStockfishEngine(const EngineOptions& options)
     : HybridObject(TAG),
-      engine_(std::make_unique<Stockfish::Engine>()),
+      engine_(createStockfishEngine()),
       estimatedMemorySizeBytes_(static_cast<size_t>(
           checkedIntegerOption(
               "hashSizeMb",
