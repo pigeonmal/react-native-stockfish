@@ -105,6 +105,10 @@ HybridStockfishEngine::HybridStockfishEngine(const EngineOptions& options)
   engine_->set_on_bestmove([this](std::string_view bestMove, std::string_view ponderMove) {
     finishSearch(bestMove, ponderMove);
   });
+  // Stockfish invokes this callback from verify_networks() on every search,
+  // including after construction. Keep it installed even though the Nitro
+  // API does not expose UCI diagnostics.
+  engine_->set_on_verify_networks([](std::string_view) {});
   applyEngineOptions(options);
 }
 
