@@ -1,5 +1,3 @@
-import type { StockfishEngine } from '../specs/StockfishEngine.nitro'
-
 /**
  * Describes which scale is used by an {@linkcode Evaluation} value.
  *
@@ -8,13 +6,14 @@ import type { StockfishEngine } from '../specs/StockfishEngine.nitro'
 export type EvaluationKind = 'centipawns' | 'mate' | 'tablebase'
 
 /**
- * A search score reported by {@linkcode StockfishEngine}.
+ * A search score reported by
+ * {@linkcode import('../specs/StockfishEngine.nitro').StockfishEngine}.
  *
  * `centipawns` values are from the side to move's perspective. `mate` values
  * contain the signed number of plies to mate, and `tablebase` values contain
  * the signed tablebase distance-to-zeroing move when available.
  *
- * @see {@linkcode StockfishEngine.startSearch}
+ * @see {@linkcode import('../specs/StockfishEngine.nitro').StockfishEngine.startSearch}
  */
 export interface Evaluation {
   /**

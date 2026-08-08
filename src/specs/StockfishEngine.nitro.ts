@@ -2,13 +2,14 @@ import type { HybridObject } from 'react-native-nitro-modules'
 import type { ListenerSubscription } from '../types/ListenerSubscription'
 import type { SearchOptions } from '../types/Options'
 import type { AnalysisInfo, BestMoveResult } from '../types/Results'
-import type { StockfishFactory } from './StockfishFactory.nitro'
-
 /**
  * A ready, stateful Stockfish search engine created by
- * {@linkcode StockfishFactory.createEngine}.
+ * {@linkcode import('./StockfishFactory.nitro').StockfishFactory.createEngine}.
  */
-export interface StockfishEngine extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
+export interface StockfishEngine extends HybridObject<{
+  ios: 'c++'
+  android: 'c++'
+}> {
   /**
    * Replaces the current position and move history. The operation stops and
    * waits for an active search before applying the new position.
@@ -42,5 +43,7 @@ export interface StockfishEngine extends HybridObject<{ ios: 'c++'; android: 'c+
    * Listener callbacks are delivered from native search workers. Remove the
    * returned subscription when the owning screen or game is disposed.
    */
-  addOnAnalysisInfoListener(listener: (info: AnalysisInfo) => void): ListenerSubscription
+  addOnAnalysisInfoListener(
+    listener: (info: AnalysisInfo) => void
+  ): ListenerSubscription
 }

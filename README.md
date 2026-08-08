@@ -26,6 +26,7 @@ import { Stockfish } from '@pigeonmal/react-native-stockfish'
 const engine = await Stockfish.createEngine({
   threads: 2,
   hashSizeMb: 32,
+  multiPv: 3,
 })
 
 const subscription = engine.addOnAnalysisInfoListener((info) => {

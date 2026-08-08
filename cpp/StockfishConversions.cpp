@@ -17,10 +17,6 @@ std::vector<std::string> splitPrincipalVariation(std::string_view pv) {
   return moves;
 }
 
-Evaluation zeroEvaluation() {
-  return Evaluation(EvaluationKind::CENTIPAWNS, 0.0);
-}
-
 } // namespace
 
 Evaluation toEvaluation(const Stockfish::Score& score) {

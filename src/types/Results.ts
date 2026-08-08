@@ -1,10 +1,9 @@
 import type { Int64 } from 'react-native-nitro-modules'
-import type { StockfishEngine } from '../specs/StockfishEngine.nitro'
 import type { Evaluation } from './Evaluation'
 
 /**
  * A low-allocation principal-variation update from
- * {@linkcode StockfishEngine.addOnAnalysisInfoListener}.
+ * {@linkcode import('../specs/StockfishEngine.nitro').StockfishEngine.addOnAnalysisInfoListener}.
  */
 export interface AnalysisInfo {
   /**
@@ -54,7 +53,8 @@ export interface AnalysisInfo {
 }
 
 /**
- * The terminal result resolved by {@linkcode StockfishEngine.startSearch}.
+ * The terminal result resolved by
+ * {@linkcode import('../specs/StockfishEngine.nitro').StockfishEngine.startSearch}.
  */
 export interface BestMoveResult {
   /**

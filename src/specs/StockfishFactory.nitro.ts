@@ -7,7 +7,10 @@ import type { StockfishEngine } from './StockfishEngine.nitro'
  *
  * @see {@linkcode StockfishEngine}
  */
-export interface StockfishFactory extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
+export interface StockfishFactory extends HybridObject<{
+  ios: 'c++'
+  android: 'c++'
+}> {
   /**
    * Creates an engine and loads its embedded NNUE networks off the JS thread.
    *

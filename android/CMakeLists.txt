@@ -59,6 +59,7 @@ target_compile_definitions(${PACKAGE_NAME} PRIVATE NDEBUG USE_PTHREADS NO_PREFET
 target_compile_options(${PACKAGE_NAME} PRIVATE
         $<$<CONFIG:Release>:-O3>
         $<$<CONFIG:Debug>:-O1>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wa,-I${CMAKE_CURRENT_SOURCE_DIR}/../third-party/stockfish/src>
         -ffunction-sections
         -fdata-sections
 )

@@ -19,8 +19,10 @@ constexpr double kDefaultMoveTimeMs = 250.0;
 constexpr int kDefaultThreads = 1;
 constexpr int kDefaultHashSizeMb = 16;
 constexpr int kDefaultSkillLevel = 20;
+constexpr int kDefaultMultiPv = 1;
 constexpr int kMaxMobileThreads = 64;
 constexpr int kMaxMobileHashSizeMb = 1024;
+constexpr int kMaxMobileMultiPv = 5;
 
 int checkedIntegerOption(const char* name, double value, int minimum, int maximum) {
   if (!std::isfinite(value) || std::floor(value) != value || value < minimum || value > maximum) {
@@ -69,7 +71,11 @@ HybridStockfishEngine::HybridStockfishEngine(const EngineOptions& options)
     : HybridObject(TAG),
       engine_(std::make_unique<Stockfish::Engine>()),
       estimatedMemorySizeBytes_(static_cast<size_t>(
-          options.hashSizeMb.value_or(static_cast<double>(kDefaultHashSizeMb))) * 1024u * 1024u +
+          checkedIntegerOption(
+              "hashSizeMb",
+              options.hashSizeMb.value_or(static_cast<double>(kDefaultHashSizeMb)),
+              1,
+              kMaxMobileHashSizeMb)) * 1024u * 1024u +
           16u * 1024u * 1024u) {
   engine_->set_on_update_full([this](const auto& info) {
     emitAnalysisInfo(toAnalysisInfo(info));
@@ -99,10 +105,14 @@ void HybridStockfishEngine::applyEngineOptions(const EngineOptions& options) {
       kMaxMobileHashSizeMb);
   const int skillLevel = checkedIntegerOption(
       "skillLevel", options.skillLevel.value_or(static_cast<double>(kDefaultSkillLevel)), 0, 20);
+  const int multiPv = checkedIntegerOption(
+      "multiPv", options.multiPv.value_or(static_cast<double>(kDefaultMultiPv)), 1,
+      kMaxMobileMultiPv);
 
   setUciOption(*engine_, "Threads", std::to_string(threads));
   setUciOption(*engine_, "Hash", std::to_string(hashSizeMb));
   setUciOption(*engine_, "Skill Level", std::to_string(skillLevel));
+  setUciOption(*engine_, "MultiPV", std::to_string(multiPv));
   setUciOption(*engine_, "UCI_Chess960", options.chess960.value_or(false) ? "true" : "false");
 }
 
@@ -316,6 +326,16 @@ void HybridStockfishEngine::finishSearch(std::string_view bestMove, std::string_
     searching_ = false;
   }
   promise->resolve(std::move(result));
+
+  // The best-move callback runs on Stockfish's search thread. Releasing the
+  // self-retain inline can invoke this object's destructor on that same thread,
+  // where waiting for search completion would deadlock. Hand the final release
+  // to Nitro's worker pool; the destructor can then safely stop/wait even when
+  // JavaScript dropped its engine reference while the search was finishing.
+  if (keepAlive != nullptr) {
+    (void)Promise<void>::async(
+        [keepAlive = std::move(keepAlive)]() { (void)keepAlive; });
+  }
 }
 
 void HybridStockfishEngine::stopAndWait() {

@@ -1,7 +1,8 @@
 import { NitroModules } from 'react-native-nitro-modules'
 import type { StockfishFactory } from './specs/StockfishFactory.nitro'
 
-export const Stockfish = NitroModules.createHybridObject<StockfishFactory>('StockfishFactory')
+export const Stockfish =
+  NitroModules.createHybridObject<StockfishFactory>('StockfishFactory')
 
 export type { StockfishEngine } from './specs/StockfishEngine.nitro'
 export type { StockfishFactory } from './specs/StockfishFactory.nitro'

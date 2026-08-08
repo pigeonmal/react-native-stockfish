@@ -42,11 +42,12 @@ namespace margelo::nitro::stockfish {
     std::optional<double> threads     SWIFT_PRIVATE;
     std::optional<double> hashSizeMb     SWIFT_PRIVATE;
     std::optional<double> skillLevel     SWIFT_PRIVATE;
+    std::optional<double> multiPv     SWIFT_PRIVATE;
     std::optional<bool> chess960     SWIFT_PRIVATE;
 
   public:
     EngineOptions() = default;
-    explicit EngineOptions(std::optional<double> threads, std::optional<double> hashSizeMb, std::optional<double> skillLevel, std::optional<bool> chess960): threads(threads), hashSizeMb(hashSizeMb), skillLevel(skillLevel), chess960(chess960) {}
+    explicit EngineOptions(std::optional<double> threads, std::optional<double> hashSizeMb, std::optional<double> skillLevel, std::optional<double> multiPv, std::optional<bool> chess960): threads(threads), hashSizeMb(hashSizeMb), skillLevel(skillLevel), multiPv(multiPv), chess960(chess960) {}
 
   public:
     friend bool operator==(const EngineOptions& lhs, const EngineOptions& rhs) = default;
@@ -65,6 +66,7 @@ namespace margelo::nitro {
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "threads"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "hashSizeMb"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "skillLevel"))),
+        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "multiPv"))),
         JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "chess960")))
       );
     }
@@ -73,6 +75,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "threads"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.threads));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "hashSizeMb"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.hashSizeMb));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "skillLevel"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.skillLevel));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "multiPv"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.multiPv));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "chess960"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.chess960));
       return obj;
     }
@@ -87,6 +90,7 @@ namespace margelo::nitro {
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "threads")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "hashSizeMb")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "skillLevel")))) return false;
+      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "multiPv")))) return false;
       if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "chess960")))) return false;
       return true;
     }

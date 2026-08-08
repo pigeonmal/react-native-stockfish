@@ -26,6 +26,10 @@ Pod::Spec.new do |s|
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
     "CLANG_CXX_LIBRARY" => "libc++",
     "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) NDEBUG USE_PTHREADS NO_PREFETCH",
+    # incbin resolves its binary at assembler time, not through C++ include
+    # paths. Give Apple's integrated assembler a package-relative search root
+    # so simulator and device builds embed the same NNUE network.
+    "OTHER_CPLUSPLUSFLAGS" => "$(inherited) -Wa,-I$(PODS_TARGET_SRCROOT)/third-party/stockfish/src",
   }
 
   load 'nitrogen/generated/ios/NitroStockfish+autolinking.rb'

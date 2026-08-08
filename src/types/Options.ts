@@ -1,11 +1,10 @@
 import type { Int64 } from 'react-native-nitro-modules'
-import type { StockfishEngine } from '../specs/StockfishEngine.nitro'
-import type { StockfishFactory } from '../specs/StockfishFactory.nitro'
 
 /**
- * Options used when creating a ready {@linkcode StockfishEngine}.
+ * Options used when creating a ready
+ * {@linkcode import('../specs/StockfishEngine.nitro').StockfishEngine}.
  *
- * @see {@linkcode StockfishFactory.createEngine}
+ * @see {@linkcode import('../specs/StockfishFactory.nitro').StockfishFactory.createEngine}
  */
 export interface EngineOptions {
   /**
@@ -25,17 +24,28 @@ export interface EngineOptions {
   skillLevel?: number
 
   /**
+   * Number of principal variations calculated for each completed depth.
+   * Defaults to `1`. Analysis screens commonly use `3`; keeping the default
+   * at one avoids extra CPU work for play and hint use cases.
+   */
+  multiPv?: number
+
+  /**
    * Enables Chess960 move generation and castling rules. Defaults to `false`.
    */
   chess960?: boolean
 }
 
 /**
- * Limits for one {@linkcode StockfishEngine.startSearch} call.
+ * Limits for one
+ * {@linkcode import('../specs/StockfishEngine.nitro').StockfishEngine.startSearch}
+ * call.
  *
  * Omitted limits use a mobile-friendly 250 ms move time. Multiple concrete
  * limits may be combined; `infinite` is mutually exclusive with the other
- * limits and requires {@linkcode StockfishEngine.stop} to finish the search.
+ * limits and requires
+ * {@linkcode import('../specs/StockfishEngine.nitro').StockfishEngine.stop} to
+ * finish the search.
  */
 export interface SearchOptions {
   /**
